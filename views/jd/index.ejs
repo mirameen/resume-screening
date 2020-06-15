@@ -1,0 +1,30 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Job descriptions</h1>
+            <p>
+                
+                Select any job description to view screened CVs
+            </p>
+            <p>
+                <a href="/jd/new" class="btn btn-primary btn-lg">Add a new job description</a>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <% jds.forEach(function(jd){ %>
+            <div class="col-sm-6">
+                <div class="card m-2 text-center">
+                    <div class="card-body">
+                        <h4 class="card-title"><%= jd.title %></h4>
+                        <a href="/jd/<%= jd._id %>" class="btn btn-info">More Info</a>
+                    </div>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>

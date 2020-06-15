@@ -1,0 +1,40 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+    <div class="jumbotron">
+        <div class="container">
+            <h1>C.V</h1>
+            <p>
+                View CVs of all candidates here
+            </p>
+            <p>
+                <a href="/cv/new" class="btn btn-primary btn-lg">Add a new CV</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <% if(files){ %>
+            <% files.forEach(function(file) { %>
+                <div class="col-md-4">
+                    <div class="card card-body m-1">
+                        <% if(file.isImage) { %>
+                            <img src="image/<%= file.filename %>" alt="">
+                        <% } else { %>
+                            <%= file.filename %>
+                        <% } %>
+                        <form method="GET" action="/cv/download/<%= file.filename %>">
+                            <button class="btn btn-success btn-block mt-4">Download</button>
+                        </form>
+                        <form method="GET" action="/cv/show/<%= file.filename %>">
+                            <button class="btn btn-info btn-block mt-4">View</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+                <p>No Cvs to show</p>
+            <% } %>
+    </div>
+</div>
+<%- include("../partials/footer") %>
