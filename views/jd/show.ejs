@@ -1,10 +1,39 @@
 <%- include("../partials/header") %>
 
 <div class="container">
-    <h1><%= currJd.title %></h1>
-    <p>
-        Job description : <%= currJd.description %>
+    <div class="row">
+        <div class="col-md-9 m-auto">
+            <h1 class="text-center display-4 my-4"><%= currJd.title %></h1>
+        </div>
+    </div>
+    <p class="lead">
+        Minimum skills required : <%= currJd.description %>
     </p>
+    <form id="delete-form" action="/jd/<%=currJd._id%>?_method=DELETE" method="POST">
+        <button class="btn btn-danger my-3">Delete</button>
+    </form>
+    <a href="/jd" class="btn btn-info my-3">Go back</a>
+    <hr>
+    <h3 class="my-4">Screened resumes</h5>
+    <div class="row">
+        <% if(dispCv){ %>
+            <% dispCv.forEach(function(filename) { %>
+                <div class="col-md-4">
+                    <div class="card card-body m-1">
+                        <%= filename %>
+                        <form method="GET" action="/cv/download/<%= filename %>">
+                            <button class="btn btn-outline-success btn-block mt-4">Download</button>
+                        </form>
+                        <form method="GET" action="/cv/show/<%= filename %>">
+                            <button class="btn btn-outline-info btn-block mt-4">View</button>
+                        </form>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+                <p>No Cvs to show</p>
+            <% } %>
+    </div>
 </div>
 
 <%- include("../partials/footer") %>

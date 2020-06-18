@@ -9,6 +9,7 @@
             </p>
             <p>
                 <a href="/cv/new" class="btn btn-primary btn-lg">Add a new CV</a>
+                <a href="/jd" class="btn btn-info btn-lg mx-3">View JDs</a>
             </p>
         </div>
     </div>
@@ -24,10 +25,13 @@
                             <%= file.filename %>
                         <% } %>
                         <form method="GET" action="/cv/download/<%= file.filename %>">
-                            <button class="btn btn-success btn-block mt-4">Download</button>
+                            <button class="btn btn-outline-success btn-block mt-3">Download</button>
                         </form>
                         <form method="GET" action="/cv/show/<%= file.filename %>">
-                            <button class="btn btn-info btn-block mt-4">View</button>
+                            <button class="btn btn-outline-info btn-block mt-3">View</button>
+                        </form>
+                        <form method="POST" action="/cv/<%= file._id %>?_method=DELETE">
+                            <button class="btn btn-outline-danger btn-block mt-3">Delete</button>
                         </form>
                     </div>
                 </div>

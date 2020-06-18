@@ -1,9 +1,31 @@
 <%- include("partials/header") %>
 
 <div class="container">
-    <h1>Welcome to the resume screening app</h1>
-    <a href="/jd" class="btn btn-primary btn-large">View all JDs</a>
-    <a href="/cv" class="btn btn-info btn-large">View all CVs</a>
+    <div class="row">
+        <div class="col-md-9 m-auto">
+            <h1 class="text-center display-4 my-4">Welcome to resume screening app</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Job descriptions</h5>
+                          <p class="card-text">View all the JDs and the resumes screened for each.</p>
+                          <a href="/jd" class="btn btn-primary btn-lg">View all JDs</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Resumes</h5>
+                          <p class="card-text">View all the resumes or Cvs stored in the database.</p>
+                          <a href="/cv" class="btn btn-info btn-lg">View all CVs</a>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <%- include("partials/footer") %>
