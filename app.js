@@ -11,9 +11,6 @@ const multer         = require("multer");
 const GridFsStorage  = require("multer-gridfs-storage");
 const Grid           = require("gridfs-stream");
 const Jd             = require("./models/jd");
-const CvContent      = require("./models/cvContent")
-const pdfreader      = require("pdfreader");
-const Cv             = require("./models/cv");
 const crawler        = require('crawler-request');
 const methodOverride = require('method-override');
  
@@ -30,13 +27,14 @@ mongoose.connect(uri);
 const conn=mongoose.connection;
 var gfs;
 
-
+//To connect gridfs with mongodb
 conn.once('open', function () {
     //Init stream
 	gfs = Grid(conn.db, mongoose.mongo);
     gfs.collection("uploads");
 });
 
+//Create storage engine
 var storage = new GridFsStorage({
     url: uri,
     file: (req, file) => {
@@ -62,10 +60,14 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.set("view engine", "ejs");
 
+//@route GET /
+//@desc Loads the landing page
 app.get("/",function(req,res){
     res.render("landing");
 });
 
+//@route GET /jd
+//@desc Loads all the JDs
 app.get("/jd",function(req,res){
     Jd.find({}, function(err,allJds){
         if(err) console.log(err);
@@ -75,10 +77,14 @@ app.get("/jd",function(req,res){
     });
 });
 
+//@route GET /jd/new
+//@desc Loads the form for a new JD
 app.get("/jd/new",function(req,res){
     res.render("jd/new");
 });
 
+//@route POST /jd
+//@desc Uploads the JD to mongodb
 app.post("/jd",function(req,res){
     var title=req.body.title;
     var desc=req.body.jobdesc;
@@ -91,13 +97,15 @@ app.post("/jd",function(req,res){
     });
 });
 
+//@route GET /jd/:id
+//@desc Loads a particular JD with screened resumes
 app.get("/jd/:id",function(req,res){
     Jd.findById(req.params.id,function(err,foundJd){
         if(err) console.log(err);
         else{
             var screenedCv = [],processed=0,kl=3;
-            var skills = foundJd.description.split(" ");
-            console.log(skills);
+            var skills = foundJd.description.split(",");
+            //console.log(skills);
             gfs.files.find().toArray((err, files) => {
                 // Check if files
                 if (!files || files.length === 0) {
@@ -105,7 +113,7 @@ app.get("/jd/:id",function(req,res){
                 } else {
                     if(files)
                     {
-                        console.log(files.length);
+                        //console.log(files.length);
                         kl=files.length;
                         files.forEach(function(file){
                             crawler("http://localhost:3000/cv/show/"+file.filename).then(function(response){
@@ -117,19 +125,19 @@ app.get("/jd/:id",function(req,res){
                                 python.stdout.on('data', function (data) {
                                     console.log('Pipe data from python script ...');
                                     largeDataSet.push(data);
-                                    console.log("hehe");
+                                    //console.log("hehe");
                                 });
                                 
                                 python.on('close', (code) => {
                                     console.log(`child process close all stdio with code ${code}`);
                                     var result = largeDataSet.join("").replace(/\s/g, ''); 
                                     var check = "True"; 
-                                    console.log(result===check);
+                                    //console.log(result===check);
                                     if(result===check){
                                         screenedCv.push(file.filename);
                                     }
                                     ++processed;
-                                    console.log(processed);
+                                    //console.log(processed);
                                     if(processed===kl) res.render("jd/show",{currJd:foundJd,dispCv:screenedCv});
                                 });
                             });
@@ -141,6 +149,8 @@ app.get("/jd/:id",function(req,res){
     });
 });
 
+//@route DELETE /jd/:id
+//@desc deletes a particular JD from the database
 app.delete("/jd/:id",function(req,res){
   Jd.findByIdAndRemove(req.params.id,function(err,jd){
 		if(err) console.log(err);
@@ -150,6 +160,8 @@ app.delete("/jd/:id",function(req,res){
 	});
 });
 
+//@route GET /cv
+//@desc Loads all the CVs
 app.get("/cv",function(req,res){
     gfs.files.find().toArray((err, files) => {
         // Check if files
@@ -171,14 +183,20 @@ app.get("/cv",function(req,res){
     });
 });
 
+//@route GET /cv/new
+//@desc Loads the form to upload resume file
 app.get("/cv/new",function(req,res){
     res.render("cv/new");
 });
 
+//@route POST /cv
+//@desc Uploads the new file
 app.post("/cv",upload.single("file"),function(req,res){
     res.redirect("/cv");
 });
 
+//@route GET /cv/download/:filename
+//@desc Downloads a particular resume
 app.get("/cv/download/:filename",function(req,res){
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
         // Check if file
@@ -194,7 +212,7 @@ app.get("/cv/download/:filename",function(req,res){
         var readstream = gfs.createReadStream({
           filename: req.params.filename
         });
-        console.log(res);
+        //console.log(res);
         //error handling, e.g. file does not exist
         readstream.on('error', function (err) {
           console.log('An error occurred!', err);
@@ -204,6 +222,8 @@ app.get("/cv/download/:filename",function(req,res){
       });
 })
 
+//@route GET /cv/show/:filename
+//@desc Loads a particular resume
 app.get("/cv/show/:filename",(req,res)=>{
     gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
       // Check if file
@@ -217,6 +237,8 @@ app.get("/cv/show/:filename",(req,res)=>{
     });
 });
 
+//@route DELETE /cv/:id
+//@desc Deletes a particular resume from database
 app.delete('/cv/:id', (req, res) => {
   gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
     if (err) {
