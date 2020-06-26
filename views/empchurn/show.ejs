@@ -1,0 +1,16 @@
+<%- include("../partials/header") %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-9 m-auto">
+            <h1 class="text-center my-4">Employee Id : <%=empDet.EmployeeID%></h1>
+            <h3 class="my-4">Predicted Probability of attrition</h3>
+            <p class="lead">
+                <%=prob.slice(0,11)%> :- <%=prob.slice(12)%>
+            </p>
+            <a href="/" class="btn btn-info btn-lg">Go Back</a>
+        </div>
+    </div>
+</div>
+
+<%- include("../partials/footer") %>

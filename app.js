@@ -249,6 +249,33 @@ app.delete('/cv/:id', (req, res) => {
   });
 });
 
+//@route GET /empchurn
+//@desc Loads form for employee details for churn
+app.get("/empchurn",function(req,res){
+    res.render("empchurn/index");
+});
+
+//@route POST /empchurn
+//@desc Finds the predicted probability of attrition
+app.post("/empchurn",function(req,res){
+    var empDet = req.body.emp;
+    var fl=0;
+    var largeDataSet = [];
+    const python = spawn('python', ['predict.py', JSON.stringify(empDet)]);
+
+    python.stdout.on('data', function (data) {
+        console.log('Pipe data from python script ...');
+        largeDataSet.push(data);
+    });
+                                
+    python.on('close', (code) => {
+        console.log(`child process close all stdio with code ${code}`);
+        var result = largeDataSet.join("").replace(/\s/g, '');
+        console.log(result);
+        fl=1;
+        if(fl===1) res.render("empchurn/show",{prob:result,empDet:empDet});
+    });
+});
 
 app.listen(port,function(){
     console.log("App has started........");
