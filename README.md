@@ -1,3 +1,10 @@
+A full stack website for viewing Job Descriptions and its corresponding screened resumes. It also has the feature to add new Job Descriptions and predict the Employee churn probability. This made using :-
+* **Backend** - NodeJS, Express.
+* **Database** - MongoDB, GridFS(to store resume files).
+* **NLP** - Spacy.
+* **Chatbot** - Rasa.
+* **Frontend** - Bootstrap.
+
 ## Steps to run the resume screening app :-
 
 1. You need to have nodejs and mongodb community server installed in your PC/laptop
