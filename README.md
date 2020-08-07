@@ -1,4 +1,4 @@
-Steps to run the resume screening app :-
+## Steps to run the resume screening app :-
 
 1. You need to have nodejs and mongodb community server installed in your PC/laptop
 
@@ -18,3 +18,25 @@ Note :- I have included a very primitive chatbot in this app, but you can replac
 
 
 Note :- Input for skills should be given with a comma as separator between each skill, while adding a new job description.  
+
+## Screenshots of website :-
+
+#### Landing Page :-
+
+<img src="images/lp_fin.PNG">
+
+#### JD Page with chatbot :-
+
+<img src="images/jdchatbot_fin.PNG">
+
+#### Resume Page :-
+
+<img src="images/cv_fin.PNG">
+
+#### Screened Resume Page :-
+
+<img src="images/scre_fin.PNG">
+
+#### Employee Churn Analysis form :-
+
+<img src="images/empform_fin.PNG">
